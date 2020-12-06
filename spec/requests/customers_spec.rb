@@ -59,12 +59,10 @@ RSpec.describe "Customers", type: :request do
   describe "put customer_path with valid data" do
     it "updates an entry and redirects to the show path for the customer" do
       customer = FactoryBot.create(:customer)
-      # TODO Is this right? I feel like I'm mixing references to `customer`
-      #  and `:customer` in an odd way.
       customer_attributes = FactoryBot.attributes_for(:customer)
       customer_attributes[:first_name] = "Updated!"
       expect { put customer_path(id: customer.id), params: {customer: customer_attributes}
-    }.to change {Customer.last.first_name}
+    }.to change {Customer.last.first_name}  # customer.reload.first_name
       expect(response).to redirect_to customer_path(id: customer.id)
     end
   end
@@ -72,8 +70,6 @@ RSpec.describe "Customers", type: :request do
   describe "put customer_path with invalid data" do
     it "does not update the customer record or redirect" do
       customer = FactoryBot.create(:customer)
-      # TODO Is this right? I feel like I'm mixing references to `customer`
-      #  and `:customer` in an odd way.
       customer_attributes = FactoryBot.attributes_for(:customer)
       customer_attributes[:phone] = "invalid-phone"
       expect { put customer_path(id: customer.id), params: {customer: customer_attributes}
